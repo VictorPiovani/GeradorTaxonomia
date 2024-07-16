@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de Taxonomia</title>
+    <title>Gerador de TaxOInomia</title>
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -12,10 +12,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
             background-color: #000;
             color: #FFA500;
+            overflow-y: auto;
         }
         .container {
             background: #000;
@@ -23,6 +24,8 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
             text-align: center;
+            width: 80%;
+            max-width: 800px;
         }
         h1, h3 {
             color: #FFA500;
@@ -34,6 +37,7 @@
         }
         .checkbox-group {
             margin-top: 20px;
+            text-align: left;
         }
         .checkbox-group label {
             display: flex;
@@ -47,6 +51,7 @@
             color: #FFA500;
             border: 1px solid #FFA500;
             padding: 5px;
+            width: calc(100% - 12px); /* Ajusta a largura para não ultrapassar a borda */
         }
         button {
             margin-top: 20px;
@@ -70,6 +75,7 @@
         }
         .sub-category, .tb-group, .qr-group {
             margin-left: 20px;
+            text-align: left;
         }
         .loading {
             display: none;
@@ -78,6 +84,7 @@
             white-space: pre;
             font-family: monospace;
             color: #FFA500;
+            text-align: left;
         }
     </style>
 </head>
@@ -195,6 +202,7 @@ _  __/  __ `/_  |/_/  / / /__  / __  __ \  __ \_  __ `__ \_  /_  __ `/
                     <label><input type="checkbox" name="qr${i}-type" value="Tratamento"> Tratamento</label>
                     <label><input type="checkbox" name="qr${i}-type" value="Disparo"> Disparo</label>
                     <label><input type="checkbox" name="qr${i}-type" value="Histórico"> Histórico</label>
+                    <label><input type="checkbox" name="qr${i}-type" value="Segmentação"> Segmentação</label>
                 `;
                 qrTypesDiv.appendChild(qrDiv);
             }
@@ -262,6 +270,7 @@ _  __/  __ `/_  |/_/  / / /__  / __  __ \  __ \_  __ `__ \_  /_  __ `/
                     resultDiv.style.display = 'block';
                 }
                 document.getElementById('loading').style.display = 'none';
+                window.scrollTo(0, 0); // Rola a página para o topo
             }, 2000); // Simula o efeito de loading por 2 segundos
         }
     </script>
