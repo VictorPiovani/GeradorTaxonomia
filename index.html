@@ -57,7 +57,7 @@
             background-color: #e0e0e0;
             border-radius: 4px;
         }
-        .sub-category, .tb-group {
+        .sub-category, .tb-group, .qr-group {
             margin-left: 20px;
         }
     </style>
@@ -82,7 +82,12 @@
                 <input type="number" id="tb-count" name="tb-count" min="1" value="1" onchange="generateTBTypes()">
                 <div id="tb-types"></div>
             </div>
-            <label><input type="checkbox" id="QR" name="taxonomia" value="QR"> Query (QR)</label>
+            <label><input type="checkbox" id="QR" name="taxonomia" value="QR" onclick="toggleQRGroup(this)"> Query (QR)</label>
+            <div id="qr-group" class="qr-group" style="display: none;">
+                <label for="qr-count">Quantidade de Querys:</label>
+                <input type="number" id="qr-count" name="qr-count" min="1" value="1" onchange="generateQRTypes()">
+                <div id="qr-types"></div>
+            </div>
             <label><input type="checkbox" id="JB" name="taxonomia" value="JB"> Journey Builder (JB)</label>
             <label><input type="checkbox" id="PR" name="taxonomia" value="PR" onclick="toggleSubcategories(this)"> Automation (PR)</label>
             <div id="subcategories" class="sub-category" style="display: none;">
@@ -132,6 +137,36 @@
             }
         }
 
+        function toggleQRGroup(checkbox) {
+            const qrGroup = document.getElementById('qr-group');
+            if (checkbox.checked) {
+                qrGroup.style.display = 'block';
+                generateQRTypes();
+            } else {
+                qrGroup.style.display = 'none';
+                document.getElementById('qr-types').innerHTML = '';
+            }
+        }
+
+        function generateQRTypes() {
+            const qrCount = document.getElementById('qr-count').value;
+            const qrTypesDiv = document.getElementById('qr-types');
+            qrTypesDiv.innerHTML = '';
+
+            for (let i = 1; i <= qrCount; i++) {
+                const qrDiv = document.createElement('div');
+                qrDiv.classList.add('qr-type');
+                qrDiv.innerHTML = `
+                    <h4>QR ${i}</h4>
+                    <label><input type="checkbox" name="qr${i}-type" value="Import"> Import</label>
+                    <label><input type="checkbox" name="qr${i}-type" value="Tratamento"> Tratamento</label>
+                    <label><input type="checkbox" name="qr${i}-type" value="Disparo"> Disparo</label>
+                    <label><input type="checkbox" name="qr${i}-type" value="Histórico"> Histórico</label>
+                `;
+                qrTypesDiv.appendChild(qrDiv);
+            }
+        }
+
         function toggleSubcategories(checkbox) {
             const subcategories = document.getElementById('subcategories');
             if (checkbox.checked) {
@@ -162,6 +197,14 @@
                         const tbTypes = document.querySelectorAll(`input[name="tb${i}-type"]:checked`);
                         tbTypes.forEach((tbType) => {
                             selectedTaxonomies.push(`${checkbox.value}_${tbType.value}_TB${i}`);
+                        });
+                    }
+                } else if (checkbox.value === 'QR') {
+                    const qrCount = document.getElementById('qr-count').value;
+                    for (let i = 1; i <= qrCount; i++) {
+                        const qrTypes = document.querySelectorAll(`input[name="qr${i}-type"]:checked`);
+                        qrTypes.forEach((qrType) => {
+                            selectedTaxonomies.push(`${checkbox.value}_${qrType.value}_QR${i}`);
                         });
                     }
                 } else if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
