@@ -90,8 +90,7 @@
 </head>
 <body>
     <div class="container">
-        
-        <div class="ascii-art">
+         <div class="ascii-art">
          
                     _____              _______________                       _____        
                     __  /______ ____  ___  __ \___  _/___________________ ______(_)_____ _
@@ -108,7 +107,7 @@
         <input type="text" id="keywords" name="keywords" required>
 
         <label for="additional-info">Informação Complementar (INFO_COMPLEMENTAR):</label>
-        <input type="text" id="additional-info" name="additional-info" required>
+        <input type="text" id="additional-info" name="additional-info">
 
         <div class="checkbox-group">
             <h3>Selecione as Taxonomias:</h3>
@@ -200,9 +199,9 @@
                     <h4>QR ${i}</h4>
                     <label><input type="checkbox" name="qr${i}-type" value="Import"> Import</label>
                     <label><input type="checkbox" name="qr${i}-type" value="Tratamento"> Tratamento</label>
-                    <label><input type="checkbox" name="qr${i}-type" value="Segmentação"> Segmentação</label>
                     <label><input type="checkbox" name="qr${i}-type" value="Disparo"> Disparo</label>
                     <label><input type="checkbox" name="qr${i}-type" value="Histórico"> Histórico</label>
+                    <label><input type="checkbox" name="qr${i}-type" value="Segmentação"> Segmentação</label>
                 `;
                 qrTypesDiv.appendChild(qrDiv);
             }
@@ -238,7 +237,12 @@
                     for (let i = 1; i <= tbCount; i++) {
                         const tbTypes = document.querySelectorAll(`input[name="tb${i}-type"]:checked`);
                         tbTypes.forEach((tbType) => {
-                            selectedTaxonomies.push(`TB${i}_${campaignName}_${keywords}_${additionalInfo}_${tbType.value}`);
+                            let taxonomy = `TB${i}_${campaignName}_${keywords}`;
+                            if (additionalInfo) {
+                                taxonomy += `_${additionalInfo}`;
+                            }
+                            taxonomy += `_${tbType.value}`;
+                            selectedTaxonomies.push(taxonomy);
                         });
                     }
                 } else if (checkbox.value === 'QR') {
@@ -246,15 +250,29 @@
                     for (let i = 1; i <= qrCount; i++) {
                         const qrTypes = document.querySelectorAll(`input[name="qr${i}-type"]:checked`);
                         qrTypes.forEach((qrType) => {
-                            selectedTaxonomies.push(`QR${i}_${campaignName}_${keywords}_${additionalInfo}_${qrType.value}`);
+                            let taxonomy = `QR${i}_${campaignName}_${keywords}`;
+                            if (additionalInfo) {
+                                taxonomy += `_${additionalInfo}`;
+                            }
+                            taxonomy += `_${qrType.value}`;
+                            selectedTaxonomies.push(taxonomy);
                         });
                     }
                 } else if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
                     subCheckboxes.forEach((subCheckbox) => {
-                        selectedTaxonomies.push(`${checkbox.value}_${campaignName}_${keywords}_${additionalInfo}_${subCheckbox.value}`);
+                        let taxonomy = `${checkbox.value}_${campaignName}_${keywords}`;
+                        if (additionalInfo) {
+                            taxonomy += `_${additionalInfo}`;
+                        }
+                        taxonomy += `_${subCheckbox.value}`;
+                        selectedTaxonomies.push(taxonomy);
                     });
                 } else {
-                    selectedTaxonomies.push(`${checkbox.value}_${campaignName}_${keywords}_${additionalInfo}`);
+                    let taxonomy = `${checkbox.value}_${campaignName}_${keywords}`;
+                    if (additionalInfo) {
+                        taxonomy += `_${additionalInfo}`;
+                    }
+                    selectedTaxonomies.push(taxonomy);
                 }
             });
 
