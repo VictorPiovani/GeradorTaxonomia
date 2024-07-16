@@ -57,21 +57,36 @@
             background-color: #e0e0e0;
             border-radius: 4px;
         }
+        .sub-category {
+            margin-left: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Gerador de Taxonomia</h1>
-        <label for="campaign-name">Nome da Campanha:</label>
+        <label for="campaign-name">Nome da Campanha (NOME_REGUA_COMPLETO):</label>
         <input type="text" id="campaign-name" name="campaign-name" required>
+
+        <label for="keywords">Palavras Chave (PALAVRAS_CHAVE):</label>
+        <input type="text" id="keywords" name="keywords" required>
+
+        <label for="additional-info">Informação Complementar (INFO_COMPLEMENTAR):</label>
+        <input type="text" id="additional-info" name="additional-info" required>
 
         <div class="checkbox-group">
             <h3>Selecione as Taxonomias:</h3>
-            <label><input type="checkbox" id="taxonomia1" name="taxonomia" value="Taxonomia 1"> Taxonomia 1</label>
-            <label><input type="checkbox" id="taxonomia2" name="taxonomia" value="Taxonomia 2"> Taxonomia 2</label>
-            <label><input type="checkbox" id="taxonomia3" name="taxonomia" value="Taxonomia 3"> Taxonomia 3</label>
-            <label><input type="checkbox" id="taxonomia4" name="taxonomia" value="Taxonomia 4"> Taxonomia 4</label>
-            <label><input type="checkbox" id="taxonomia5" name="taxonomia" value="Taxonomia 5"> Taxonomia 5</label>
+            <label><input type="checkbox" id="TB" name="taxonomia" value="TB"> Data Extensions (TB)</label>
+            <label><input type="checkbox" id="QR" name="taxonomia" value="QR"> Query (QR)</label>
+            <label><input type="checkbox" id="JB" name="taxonomia" value="JB"> Journey Builder (JB)</label>
+            <label><input type="checkbox" id="PR" name="taxonomia" value="PR" onclick="toggleSubcategories(this)"> Automation (PR)</label>
+            <div id="subcategories" class="sub-category" style="display: none;">
+                <label><input type="checkbox" id="IMPORT" name="sub-taxonomia" value="Import"> IMPORT (Import)</label>
+                <label><input type="checkbox" id="DE" name="sub-taxonomia" value="DE"> DataExtract (DE)</label>
+                <label><input type="checkbox" id="FT" name="sub-taxonomia" value="FT"> FileTransfer (FT)</label>
+                <label><input type="checkbox" id="DF" name="sub-taxonomia" value="DF"> DataFilter (DF)</label>
+                <label><input type="checkbox" id="Script" name="sub-taxonomia" value="Script"> Script (Script)</label>
+            </div>
         </div>
 
         <button onclick="generateTaxonomy()">Gerar Taxonomia</button>
@@ -83,20 +98,45 @@
     </div>
 
     <script>
+        function toggleSubcategories(checkbox) {
+            const subcategories = document.getElementById('subcategories');
+            if (checkbox.checked) {
+                subcategories.style.display = 'block';
+            } else {
+                subcategories.style.display = 'none';
+                const subCheckboxes = subcategories.querySelectorAll('input[type="checkbox"]');
+                subCheckboxes.forEach((subCheckbox) => {
+                    subCheckbox.checked = false;
+                });
+            }
+        }
+
         function generateTaxonomy() {
             const campaignName = document.getElementById('campaign-name').value;
+            const keywords = document.getElementById('keywords').value;
+            const additionalInfo = document.getElementById('additional-info').value;
+
             const checkboxes = document.querySelectorAll('input[name="taxonomia"]:checked');
+            const subCheckboxes = document.querySelectorAll('input[name="sub-taxonomia"]:checked');
+
             let selectedTaxonomies = [];
 
             checkboxes.forEach((checkbox) => {
-                selectedTaxonomies.push(checkbox.value);
+                if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
+                    subCheckboxes.forEach((subCheckbox) => {
+                        selectedTaxonomies.push(`${checkbox.value}_${subCheckbox.value}`);
+                    });
+                } else {
+                    selectedTaxonomies.push(checkbox.value);
+                }
             });
 
             const resultDiv = document.getElementById('result');
             const resultText = document.getElementById('result-text');
 
             if (selectedTaxonomies.length > 0) {
-                resultText.innerHTML = `<strong>Campanha:</strong> ${campaignName}<br><strong>Taxonomias:</strong> ${selectedTaxonomies.join(', ')}`;
+                const taxonomies = selectedTaxonomies.map(taxonomy => `${taxonomy}_${campaignName}_${keywords}_${additionalInfo}`);
+                resultText.innerHTML = taxonomies.join('<br>');
                 resultDiv.style.display = 'block';
             } else {
                 resultText.innerHTML = 'Nenhuma taxonomia selecionada.';
