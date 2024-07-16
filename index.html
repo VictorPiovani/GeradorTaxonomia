@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Taxonomia</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        .checkbox-group {
+            margin-top: 20px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+        }
+        .checkbox-group input {
+            margin-right: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Taxonomia</h1>
+        <label for="campaign-name">Nome da Campanha:</label>
+        <input type="text" id="campaign-name" name="campaign-name" required>
+
+        <div class="checkbox-group">
+            <h3>Selecione as Taxonomias:</h3>
+            <label><input type="checkbox" id="taxonomia1" name="taxonomia" value="Taxonomia 1"> Taxonomia 1</label>
+            <label><input type="checkbox" id="taxonomia2" name="taxonomia" value="Taxonomia 2"> Taxonomia 2</label>
+            <label><input type="checkbox" id="taxonomia3" name="taxonomia" value="Taxonomia 3"> Taxonomia 3</label>
+            <label><input type="checkbox" id="taxonomia4" name="taxonomia" value="Taxonomia 4"> Taxonomia 4</label>
+            <label><input type="checkbox" id="taxonomia5" name="taxonomia" value="Taxonomia 5"> Taxonomia 5</label>
+        </div>
+
+        <button onclick="generateTaxonomy()">Gerar Taxonomia</button>
+
+        <div id="result" class="result" style="display: none;">
+            <h3>Taxonomias Geradas:</h3>
+            <p id="result-text"></p>
+        </div>
+    </div>
+
+    <script>
+        function generateTaxonomy() {
+            const campaignName = document.getElementById('campaign-name').value;
+            const checkboxes = document.querySelectorAll('input[name="taxonomia"]:checked');
+            let selectedTaxonomies = [];
+
+            checkboxes.forEach((checkbox) => {
+                selectedTaxonomies.push(checkbox.value);
+            });
+
+            const resultDiv = document.getElementById('result');
+            const resultText = document.getElementById('result-text');
+
+            if (selectedTaxonomies.length > 0) {
+                resultText.innerHTML = `<strong>Campanha:</strong> ${campaignName}<br><strong>Taxonomias:</strong> ${selectedTaxonomies.join(', ')}`;
+                resultDiv.style.display = 'block';
+            } else {
+                resultText.innerHTML = 'Nenhuma taxonomia selecionada.';
+                resultDiv.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
