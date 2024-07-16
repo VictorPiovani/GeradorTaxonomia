@@ -57,7 +57,7 @@
             background-color: #e0e0e0;
             border-radius: 4px;
         }
-        .sub-category {
+        .sub-category, .tb-group {
             margin-left: 20px;
         }
     </style>
@@ -76,7 +76,12 @@
 
         <div class="checkbox-group">
             <h3>Selecione as Taxonomias:</h3>
-            <label><input type="checkbox" id="TB" name="taxonomia" value="TB"> Data Extensions (TB)</label>
+            <label><input type="checkbox" id="TB" name="taxonomia" value="TB" onclick="toggleTBGroup(this)"> Data Extensions (TB)</label>
+            <div id="tb-group" class="tb-group" style="display: none;">
+                <label for="tb-count">Quantidade de TBs:</label>
+                <input type="number" id="tb-count" name="tb-count" min="1" value="1" onchange="generateTBTypes()">
+                <div id="tb-types"></div>
+            </div>
             <label><input type="checkbox" id="QR" name="taxonomia" value="QR"> Query (QR)</label>
             <label><input type="checkbox" id="JB" name="taxonomia" value="JB"> Journey Builder (JB)</label>
             <label><input type="checkbox" id="PR" name="taxonomia" value="PR" onclick="toggleSubcategories(this)"> Automation (PR)</label>
@@ -98,6 +103,35 @@
     </div>
 
     <script>
+        function toggleTBGroup(checkbox) {
+            const tbGroup = document.getElementById('tb-group');
+            if (checkbox.checked) {
+                tbGroup.style.display = 'block';
+                generateTBTypes();
+            } else {
+                tbGroup.style.display = 'none';
+                document.getElementById('tb-types').innerHTML = '';
+            }
+        }
+
+        function generateTBTypes() {
+            const tbCount = document.getElementById('tb-count').value;
+            const tbTypesDiv = document.getElementById('tb-types');
+            tbTypesDiv.innerHTML = '';
+
+            for (let i = 1; i <= tbCount; i++) {
+                const tbDiv = document.createElement('div');
+                tbDiv.classList.add('tb-type');
+                tbDiv.innerHTML = `
+                    <h4>TB ${i}</h4>
+                    <label><input type="checkbox" name="tb${i}-type" value="Import"> Import</label>
+                    <label><input type="checkbox" name="tb${i}-type" value="Disparo"> Disparo</label>
+                    <label><input type="checkbox" name="tb${i}-type" value="Histórico"> Histórico</label>
+                `;
+                tbTypesDiv.appendChild(tbDiv);
+            }
+        }
+
         function toggleSubcategories(checkbox) {
             const subcategories = document.getElementById('subcategories');
             if (checkbox.checked) {
@@ -122,7 +156,15 @@
             let selectedTaxonomies = [];
 
             checkboxes.forEach((checkbox) => {
-                if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
+                if (checkbox.value === 'TB') {
+                    const tbCount = document.getElementById('tb-count').value;
+                    for (let i = 1; i <= tbCount; i++) {
+                        const tbTypes = document.querySelectorAll(`input[name="tb${i}-type"]:checked`);
+                        tbTypes.forEach((tbType) => {
+                            selectedTaxonomies.push(`${checkbox.value}_${tbType.value}_TB${i}`);
+                        });
+                    }
+                } else if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
                     subCheckboxes.forEach((subCheckbox) => {
                         selectedTaxonomies.push(`${checkbox.value}_${subCheckbox.value}`);
                     });
