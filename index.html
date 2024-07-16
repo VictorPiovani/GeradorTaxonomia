@@ -196,7 +196,7 @@
                     for (let i = 1; i <= tbCount; i++) {
                         const tbTypes = document.querySelectorAll(`input[name="tb${i}-type"]:checked`);
                         tbTypes.forEach((tbType) => {
-                            selectedTaxonomies.push(`${checkbox.value}_${tbType.value}_TB${i}`);
+                            selectedTaxonomies.push(`TB${i}_${tbType.value}`);
                         });
                     }
                 } else if (checkbox.value === 'QR') {
@@ -204,7 +204,7 @@
                     for (let i = 1; i <= qrCount; i++) {
                         const qrTypes = document.querySelectorAll(`input[name="qr${i}-type"]:checked`);
                         qrTypes.forEach((qrType) => {
-                            selectedTaxonomies.push(`${checkbox.value}_${qrType.value}_QR${i}`);
+                            selectedTaxonomies.push(`QR${i}_${qrType.value}`);
                         });
                     }
                 } else if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
