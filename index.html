@@ -196,7 +196,7 @@
                     for (let i = 1; i <= tbCount; i++) {
                         const tbTypes = document.querySelectorAll(`input[name="tb${i}-type"]:checked`);
                         tbTypes.forEach((tbType) => {
-                            selectedTaxonomies.push(`TB${i}_${tbType.value}`);
+                            selectedTaxonomies.push(`TB${i}_${campaignName}_${keywords}_${additionalInfo}_${tbType.value}`);
                         });
                     }
                 } else if (checkbox.value === 'QR') {
@@ -204,15 +204,15 @@
                     for (let i = 1; i <= qrCount; i++) {
                         const qrTypes = document.querySelectorAll(`input[name="qr${i}-type"]:checked`);
                         qrTypes.forEach((qrType) => {
-                            selectedTaxonomies.push(`QR${i}_${qrType.value}`);
+                            selectedTaxonomies.push(`QR${i}_${campaignName}_${keywords}_${additionalInfo}_${qrType.value}`);
                         });
                     }
                 } else if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
                     subCheckboxes.forEach((subCheckbox) => {
-                        selectedTaxonomies.push(`${checkbox.value}_${subCheckbox.value}`);
+                        selectedTaxonomies.push(`${checkbox.value}_${campaignName}_${keywords}_${additionalInfo}_${subCheckbox.value}`);
                     });
                 } else {
-                    selectedTaxonomies.push(checkbox.value);
+                    selectedTaxonomies.push(`${checkbox.value}_${campaignName}_${keywords}_${additionalInfo}`);
                 }
             });
 
@@ -220,8 +220,7 @@
             const resultText = document.getElementById('result-text');
 
             if (selectedTaxonomies.length > 0) {
-                const taxonomies = selectedTaxonomies.map(taxonomy => `${taxonomy}_${campaignName}_${keywords}_${additionalInfo}`);
-                resultText.innerHTML = taxonomies.join('<br>');
+                resultText.innerHTML = selectedTaxonomies.join('<br>');
                 resultDiv.style.display = 'block';
             } else {
                 resultText.innerHTML = 'Nenhuma taxonomia selecionada.';
