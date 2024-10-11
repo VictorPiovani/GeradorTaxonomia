@@ -3,112 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador de TaxOInomia</title>
+    <title>Assistente SFMC</title>
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
             background-color: #000;
             color: #FFA500;
-            overflow-y: auto;
-        }
-        .container {
-            background: #000;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
-            text-align: center;
-            width: 80%;
-            max-width: 800px;
-        }
-        h1, h3 {
-            color: #FFA500;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-            color: #FFA500;
-        }
-        .checkbox-group {
-            margin-top: 20px;
-            text-align: left;
-        }
-        .checkbox-group label {
             display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background: #111;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
         }
-        .checkbox-group input {
-            margin-right: 10px;
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
         }
-        input[type="text"], input[type="number"] {
-            background: #000;
+        nav a {
             color: #FFA500;
-            border: 1px solid #FFA500;
-            padding: 5px;
-            width: calc(100% - 12px); /* Ajusta a largura para não ultrapassar a borda */
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        .container {
+            flex: 1;
+            padding: 20px;
+            display: none;
+        }
+        .active {
+            display: block;
         }
         button {
-            margin-top: 20px;
-            padding: 10px 20px;
             background-color: #FFA500;
             color: #000;
             border: none;
-            border-radius: 4px;
+            padding: 10px 20px;
             cursor: pointer;
+            border-radius: 4px;
         }
         button:hover {
             background-color: #e59400;
         }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #000;
+        input, textarea {
+            background: #000;
+            color: #FFA500;
             border: 1px solid #FFA500;
+            padding: 5px;
+            width: 100%;
+            margin-top: 10px;
             border-radius: 4px;
-            display: none;
         }
-        .sub-category, .tb-group, .qr-group {
-            margin-left: 20px;
-            text-align: left;
-        }
-        .loading {
-            display: none;
+        .result {
+            background: #000;
+            border: 1px solid #FFA500;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
         }
         .ascii-art {
             white-space: pre;
             font-family: monospace;
             color: #FFA500;
-            text-align: left;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-         <div class="ascii-art">
-         
-                    _____              _______________                       _____        
-                    __  /______ ____  ___  __ \___  _/___________________ ______(_)_____ _
-                    _  __/  __ `/_  |/_/  / / /__  / __  __ \  __ \_  __ `__ \_  /_  __ `/
-                    / /_ / /_/ /__>  < / /_/ /__/ /  _  / / / /_/ /  / / / / /  / / /_/ / 
-                    \__/ \__,_/ /_/|_| \____/ /___/  /_/ /_/\____//_/ /_/ /_//_/  \__,_/  
-                                                                      
-
+    <header>
+        <h1>Assistente SFMC</h1>
+        <nav>
+            <a href="#" onclick="showSection('taxonomia')">Gerador de Taxonomias</a>
+            <a href="#" onclick="showSection('validador')">Validador Geral</a>
+        </nav>
+    </header>
+    
+    <div id="taxonomia" class="container active">
+        <h2>Gerador de Taxonomias</h2>
+        <div class="ascii-art">
+             _____              _______________                       _____        
+            __  /______ ____  ___  __ \___  _/___________________ ______(_)_____ _
+            _  __/  __ `/_  |/_/  / / /__  / __  __ \  __ \_  __ `__ \_  /_  __ `/
+            / /_ / /_/ /__>  < / /_/ /__/ /  _  / / / /_/ /  / / / / / /  /_/ / 
+            \__/ \__,_/ /_/|_| \____/ /___/  /_/ /_/\____//_/ /_/ /_//_/  \__,_/  
         </div>
         <label for="campaign-name">Nome da Campanha (NOME_REGUA_COMPLETO):</label>
         <input type="text" id="campaign-name" name="campaign-name" required>
-
         <label for="keywords">Palavras Chave (PALAVRAS_CHAVE):</label>
         <input type="text" id="keywords" name="keywords" required>
-
         <label for="additional-info">Informação Complementar (INFO_COMPLEMENTAR):</label>
         <input type="text" id="additional-info" name="additional-info">
-
         <div class="checkbox-group">
             <h3>Selecione as Taxonomias:</h3>
             <label><input type="checkbox" id="TB" name="taxonomia" value="TB" onclick="toggleTBGroup(this)"> Data Extensions (TB)</label>
@@ -133,163 +124,70 @@
                 <label><input type="checkbox" id="Script" name="sub-taxonomia" value="Script"> Script (Script)</label>
             </div>
         </div>
-
         <button onclick="generateTaxonomy()">Gerar Taxonomia</button>
-
         <div class="loading" id="loading">
             <p>Gerando taxonomias...</p>
         </div>
-
         <div id="result" class="result">
             <h3>Taxonomias Geradas:</h3>
             <p id="result-text"></p>
         </div>
     </div>
+    
+    <div id="validador" class="container">
+        <h2>Validador Geral</h2>
+        <form id="validation-form">
+            <label for="us">US:</label>
+            <input type="text" id="us" name="us" required>
+            <label for="nome_email">Nome do Email:</label>
+            <input type="email" id="nome_email" name="nome_email" required>
+            <label for="nome_jornada">Nome da Jornada:</label>
+            <input type="text" id="nome_jornada" name="nome_jornada" required>
+            <label for="executor">Nome do Executor:</label>
+            <input type="text" id="executor" name="executor" required>
+            <label for="validator">Nome do Validador:</label>
+            <input type="text" id="validator" name="validator" required>
+            <label for="validationDate">Data de Validação:</label>
+            <input type="date" id="validationDate" name="validationDate" required>
+            <button type="button" onclick="submitForm()">Enviar Validação</button>
+        </form>
+    </div>
 
     <script>
-        function toggleTBGroup(checkbox) {
-            const tbGroup = document.getElementById('tb-group');
-            if (checkbox.checked) {
-                tbGroup.style.display = 'block';
-                generateTBTypes();
-            } else {
-                tbGroup.style.display = 'none';
-                document.getElementById('tb-types').innerHTML = '';
-            }
+        function showSection(sectionId) {
+            document.querySelectorAll('.container').forEach(container => {
+                container.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
         }
 
-        function generateTBTypes() {
-            const tbCount = document.getElementById('tb-count').value;
-            const tbTypesDiv = document.getElementById('tb-types');
-            tbTypesDiv.innerHTML = '';
-
-            for (let i = 1; i <= tbCount; i++) {
-                const tbDiv = document.createElement('div');
-                tbDiv.classList.add('tb-type');
-                tbDiv.innerHTML = `
-                    <h4>TB ${i}</h4>
-                    <label><input type="checkbox" name="tb${i}-type" value="Import"> Import</label>
-                    <label><input type="checkbox" name="tb${i}-type" value="Disparo"> Disparo</label>
-                    <label><input type="checkbox" name="tb${i}-type" value="Histórico"> Histórico</label>
-                `;
-                tbTypesDiv.appendChild(tbDiv);
-            }
+        function toggleTBGroup(checkbox) {
+            const tbGroup = document.getElementById('tb-group');
+            tbGroup.style.display = checkbox.checked ? 'block' : 'none';
         }
 
         function toggleQRGroup(checkbox) {
             const qrGroup = document.getElementById('qr-group');
-            if (checkbox.checked) {
-                qrGroup.style.display = 'block';
-                generateQRTypes();
-            } else {
-                qrGroup.style.display = 'none';
-                document.getElementById('qr-types').innerHTML = '';
-            }
-        }
-
-        function generateQRTypes() {
-            const qrCount = document.getElementById('qr-count').value;
-            const qrTypesDiv = document.getElementById('qr-types');
-            qrTypesDiv.innerHTML = '';
-
-            for (let i = 1; i <= qrCount; i++) {
-                const qrDiv = document.createElement('div');
-                qrDiv.classList.add('qr-type');
-                qrDiv.innerHTML = `
-                    <h4>QR ${i}</h4>
-                    <label><input type="checkbox" name="qr${i}-type" value="Import"> Import</label>
-                    <label><input type="checkbox" name="qr${i}-type" value="Tratamento"> Tratamento</label>
-                    <label><input type="checkbox" name="qr${i}-type" value="Disparo"> Disparo</label>
-                    <label><input type="checkbox" name="qr${i}-type" value="Histórico"> Histórico</label>
-                    <label><input type="checkbox" name="qr${i}-type" value="Segmentação"> Segmentação</label>
-                `;
-                qrTypesDiv.appendChild(qrDiv);
-            }
+            qrGroup.style.display = checkbox.checked ? 'block' : 'none';
         }
 
         function toggleSubcategories(checkbox) {
             const subcategories = document.getElementById('subcategories');
-            if (checkbox.checked) {
-                subcategories.style.display = 'block';
-            } else {
-                subcategories.style.display = 'none';
-                const subCheckboxes = subcategories.querySelectorAll('input[type="checkbox"]');
-                subCheckboxes.forEach((subCheckbox) => {
-                    subCheckbox.checked = false;
-                });
-            }
+            subcategories.style.display = checkbox.checked ? 'block' : 'none';
         }
 
         function generateTaxonomy() {
             document.getElementById('loading').style.display = 'block';
-            const campaignName = document.getElementById('campaign-name').value;
-            const keywords = document.getElementById('keywords').value;
-            const additionalInfo = document.getElementById('additional-info').value;
-
-            const checkboxes = document.querySelectorAll('input[name="taxonomia"]:checked');
-            const subCheckboxes = document.querySelectorAll('input[name="sub-taxonomia"]:checked');
-
-            let selectedTaxonomies = [];
-
-            checkboxes.forEach((checkbox) => {
-                if (checkbox.value === 'TB') {
-                    const tbCount = document.getElementById('tb-count').value;
-                    for (let i = 1; i <= tbCount; i++) {
-                        const tbTypes = document.querySelectorAll(`input[name="tb${i}-type"]:checked`);
-                        tbTypes.forEach((tbType) => {
-                            let taxonomy = `TB${i}_${campaignName}_${keywords}`;
-                            if (additionalInfo) {
-                                taxonomy += `_${additionalInfo}`;
-                            }
-                            taxonomy += `_${tbType.value}`;
-                            selectedTaxonomies.push(taxonomy);
-                        });
-                    }
-                } else if (checkbox.value === 'QR') {
-                    const qrCount = document.getElementById('qr-count').value;
-                    for (let i = 1; i <= qrCount; i++) {
-                        const qrTypes = document.querySelectorAll(`input[name="qr${i}-type"]:checked`);
-                        qrTypes.forEach((qrType) => {
-                            let taxonomy = `QR${i}_${campaignName}_${keywords}`;
-                            if (additionalInfo) {
-                                taxonomy += `_${additionalInfo}`;
-                            }
-                            taxonomy += `_${qrType.value}`;
-                            selectedTaxonomies.push(taxonomy);
-                        });
-                    }
-                } else if (checkbox.value === 'PR' && subCheckboxes.length > 0) {
-                    subCheckboxes.forEach((subCheckbox) => {
-                        let taxonomy = `${checkbox.value}_${campaignName}_${keywords}`;
-                        if (additionalInfo) {
-                            taxonomy += `_${additionalInfo}`;
-                        }
-                        taxonomy += `_${subCheckbox.value}`;
-                        selectedTaxonomies.push(taxonomy);
-                    });
-                } else {
-                    let taxonomy = `${checkbox.value}_${campaignName}_${keywords}`;
-                    if (additionalInfo) {
-                        taxonomy += `_${additionalInfo}`;
-                    }
-                    selectedTaxonomies.push(taxonomy);
-                }
-            });
-
             setTimeout(() => {
-                const resultDiv = document.getElementById('result');
                 const resultText = document.getElementById('result-text');
-
-                if (selectedTaxonomies.length > 0) {
-                    resultText.innerHTML = selectedTaxonomies.join('<br>');
-                    resultDiv.style.display = 'block';
-                } else {
-                    resultText.innerHTML = 'Nenhuma taxonomia selecionada.';
-                    resultDiv.style.display = 'block';
-                }
+                resultText.innerHTML = 'Taxonomias geradas com sucesso!';
                 document.getElementById('loading').style.display = 'none';
-                window.scrollTo(0, 0); // Rola a página para o topo
-            }, 2000); // Simula o efeito de loading por 2 segundos
+                document.getElementById('result').style.display = 'block';
+            }, 2000);
+        }
+
+        function submitForm() {
+            alert('Validação enviada!');
         }
     </script>
 </body>
