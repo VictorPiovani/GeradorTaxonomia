@@ -49,6 +49,7 @@
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 4px;
+            margin-top: 20px;
         }
         button:hover {
             background-color: #e59400;
@@ -69,10 +70,32 @@
             margin-top: 20px;
             border-radius: 4px;
         }
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .checkbox-group input {
+            margin-right: 10px;
+        }
         .ascii-art {
             white-space: pre;
             font-family: monospace;
             color: #FFA500;
+        }
+        .tb-group, .qr-group, .sub-category {
+            margin-left: 20px;
+            margin-top: 10px;
+            text-align: left;
+        }
+        .loading {
+            display: none;
         }
     </style>
 </head>
@@ -100,6 +123,7 @@
         <input type="text" id="keywords" name="keywords" required>
         <label for="additional-info">Informação Complementar (INFO_COMPLEMENTAR):</label>
         <input type="text" id="additional-info" name="additional-info">
+        
         <div class="checkbox-group">
             <h3>Selecione as Taxonomias:</h3>
             <label><input type="checkbox" id="TB" name="taxonomia" value="TB" onclick="toggleTBGroup(this)"> Data Extensions (TB)</label>
@@ -110,7 +134,7 @@
             </div>
             <label><input type="checkbox" id="QR" name="taxonomia" value="QR" onclick="toggleQRGroup(this)"> Query (QR)</label>
             <div id="qr-group" class="qr-group" style="display: none;">
-                <label for="qr-count">Quantidade de Querys:</label>
+                <label for="qr-count">Quantidade de Queries:</label>
                 <input type="number" id="qr-count" name="qr-count" min="1" value="1" onchange="generateQRTypes()">
                 <div id="qr-types"></div>
             </div>
@@ -177,18 +201,4 @@
         }
 
         function generateTaxonomy() {
-            document.getElementById('loading').style.display = 'block';
-            setTimeout(() => {
-                const resultText = document.getElementById('result-text');
-                resultText.innerHTML = 'Taxonomias geradas com sucesso!';
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('result').style.display = 'block';
-            }, 2000);
-        }
-
-        function submitForm() {
-            alert('Validação enviada!');
-        }
-    </script>
-</body>
-</html>
+            document.get
