@@ -79,20 +79,24 @@
         .checkbox-group label {
             display: flex;
             align-items: center;
+            gap: 10px; /* Adiciona um espaço entre o checkbox e o texto */
             margin-bottom: 5px;
+            width: 100%;
         }
         .checkbox-group input {
             margin-right: 10px;
         }
-        .ascii-art {
-            white-space: pre;
-            font-family: monospace;
-            color: #FFA500;
-        }
         .tb-group, .qr-group, .sub-category {
             margin-left: 20px;
             margin-top: 10px;
-            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .tb-group label, .qr-group label, .sub-category label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .loading {
             display: none;
@@ -110,13 +114,6 @@
     
     <div id="taxonomia" class="container active">
         <h2>Gerador de Taxonomias</h2>
-        <div class="ascii-art">
-             _____              _______________                       _____        
-            __  /______ ____  ___  __ \___  _/___________________ ______(_)_____ _
-            _  __/  __ `/_  |/_/  / / /__  / __  __ \  __ \_  __ `__ \_  /_  __ `/
-            / /_ / /_/ /__>  < / /_/ /__/ /  _  / / / /_/ /  / / / / / /  /_/ / 
-            \__/ \__,_/ /_/|_| \____/ /___/  /_/ /_/\____//_/ /_/ /_//_/  \__,_/  
-        </div>
         <label for="campaign-name">Nome da Campanha (NOME_REGUA_COMPLETO):</label>
         <input type="text" id="campaign-name" name="campaign-name" required>
         <label for="keywords">Palavras Chave (PALAVRAS_CHAVE):</label>
@@ -201,4 +198,7 @@
         }
 
         function generateTaxonomy() {
-            document.get
+            document.getElementById('loading').style.display = 'block';
+            setTimeout(() => {
+                const resultText = document.getElementById('result-text');
+                resultText.innerHTML = 'Taxonomias geradas com
