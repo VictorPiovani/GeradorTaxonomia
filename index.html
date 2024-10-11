@@ -201,4 +201,15 @@
             document.getElementById('loading').style.display = 'block';
             setTimeout(() => {
                 const resultText = document.getElementById('result-text');
-                resultText.innerHTML = 'Taxonomias geradas com
+                resultText.innerHTML = 'Taxonomias geradas com sucesso!';
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+            }, 2000);
+        }
+
+        function submitForm() {
+            alert('Validação enviada!');
+        }
+    </script>
+</body>
+</html>
