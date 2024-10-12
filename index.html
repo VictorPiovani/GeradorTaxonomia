@@ -71,18 +71,16 @@
             border-radius: 4px;
         }
         .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
             margin-top: 20px;
         }
         .checkbox-group label {
             display: flex;
             align-items: center;
+            gap: 10px; /* Adiciona um espaço entre o checkbox e o texto */
             margin-bottom: 5px;
         }
         .checkbox-group label input {
-            margin-right: 10px;
+            margin: 0; /* Remove qualquer margem do checkbox */
         }
         .tb-group, .qr-group, .sub-category {
             margin-left: 20px;
@@ -93,7 +91,7 @@
         .tb-group label, .qr-group label, .sub-category label {
             display: flex;
             align-items: center;
-            margin-bottom: 5px;
+            gap: 10px;
         }
         .loading {
             display: none;
